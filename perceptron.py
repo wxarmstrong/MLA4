@@ -27,6 +27,9 @@ df = pd.read_csv('optdigits.tes', sep=',', header=None) #reading the data by usi
 X_test = np.array(df.values)[:,:64]    #getting the first 64 fields to form the feature data for test
 y_test = np.array(df.values)[:,-1]     #getting the last field to form the class label for test
 
+topPerceptron = 0
+topMLP = 0
+
 for w in n: #iterates over n
 
     for b in r: #iterates over r
@@ -47,11 +50,26 @@ for w in n: #iterates over n
             #for (x_testSample, y_testSample) in zip(X_test, y_test):
             #to make a prediction do: clf.predict([x_testSample])
             #--> add your Python code here
+            numCorrect = 0
+            numTotal = 0
+            for (x_testSample, y_testSample) in zip(X_test, y_test):
+                numTotal = numTotal + 1
+                this_predict = clf.predict([x_testSample])
+                if (this_predict == y_testSample):
+                    numCorrect = numCorrect + 1
+            accuracy = numCorrect / float(numTotal)
 
             #check if the calculated accuracy is higher than the previously one calculated for each classifier. If so, update the highest accuracy and print it together with the network hyperparameters
             #Example: "Highest Perceptron accuracy so far: 0.88, Parameters: learning rate=0.01, shuffle=True"
             #Example: "Highest MLP accuracy so far: 0.90, Parameters: learning rate=0.02, shuffle=False"
             #--> add your Python code here
+            if (a==0 and accuracy > topPerceptron):
+                topPerceptron = accuracy
+                print("Highest Perceptron accuracy so far: " + str(topPerceptron) + ", Parameters: learning rate=" + str(w) + ", shuffle=" + str(b))
+            if (a==1 and accuracy > topMLP):
+                topMLP = accuracy
+                print("Highest MLP accuracy so far: " + str(topMLP) + ", Parameters: learning rate=" + str(w) + ", shuffle=" + str(b))
+            
 
 
 
